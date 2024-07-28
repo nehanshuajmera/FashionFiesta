@@ -1,9 +1,10 @@
 import './App.css';
+import { HomePage } from './pages/homepage/homepage.component';
 
 const App = () => {
   return (
     <div className="App">
-      <h1>App</h1>
+      <HomePage />
     </div>
   );
 }
