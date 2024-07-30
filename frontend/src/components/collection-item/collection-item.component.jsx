@@ -1,6 +1,6 @@
 import './collection-item.styles.scss';
 
-export const CollectionItem = ({ id, name, price, imageUrl }) => {
+export const CollectionItem = ({ name, price, imageUrl }) => {
   return (
     <div className="collection-item">
       <div
