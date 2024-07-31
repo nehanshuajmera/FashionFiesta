@@ -8,6 +8,10 @@ export const Header = () => {
         <Link to="/">
           <img src="Logo.png" alt="Logo" />
         </Link>
+        <div>
+          <div style={{color: "#FF7886"}}>Fashion</div>
+          <div style={{color: "#B4DAFF"}}>Fiesta</div>
+        </div>
       </div>
       <div className="options">
         <NavLink to="/shop" className="option">Shop</NavLink>
