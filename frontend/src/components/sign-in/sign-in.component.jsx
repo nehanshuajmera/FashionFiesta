@@ -14,8 +14,8 @@ export const SignIn = () => {
     e.preventDefault();
 
     // Logging the details on console
-    console.log("Email:", formData.email);
-    console.log("Password:", formData.password);
+    // console.log("Email:", formData.email);
+    // console.log("Password:", formData.password);
 
     // clear the form fields
     setFormData({
