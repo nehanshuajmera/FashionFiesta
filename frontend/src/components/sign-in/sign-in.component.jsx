@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './sign-in.styles.scss';
+import { FormInput } from '../form-input/form-input.component';
 
 export const SignIn = () => {
 
@@ -19,17 +20,17 @@ export const SignIn = () => {
     setFormData({
       email: '',
       password: ''
-    })
-  }
+    });
+  };
 
   const handleChange = e => {
     const { value, name } = e.target;
 
     setFormData((prevState) => ({
       ...prevState,
-      [name] : value
-    }))
-  }
+      [name]: value
+    }));
+  };
 
   return (
     <div className="sign-in">
@@ -37,23 +38,23 @@ export const SignIn = () => {
       <span>Sign in with your email and password</span>
 
       <form onSubmit={handleSubmit}>
-        <input
+        <FormInput
           type="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
+          handleChange={handleChange}
+          label="Email"
           required
         />
-        <label htmlFor="email">Email</label>
 
-        <input
+        <FormInput
           type="password"
           name="password"
           value={formData.password}
-          onChange={handleChange}
+          handleChange={handleChange}
+          label="Password"
           required
         />
-        <label htmlFor="password">Password</label>
 
         <input type="submit" value="Submit" />
       </form>
