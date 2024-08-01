@@ -3,20 +3,32 @@ import './sign-in.styles.scss';
 
 export const SignIn = () => {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    email = ""
-    password = ""
+    // Logging the details on console
+    console.log("Email:", formData.email);
+    console.log("Password:", formData.password);
+
+    // clear the form fields
+    setFormData({
+      email: '',
+      password: ''
+    })
   }
 
   const handleChange = e => {
     const { value, name } = e.target;
 
-    
+    setFormData((prevState) => ({
+      ...prevState,
+      [name] : value
+    }))
   }
 
   return (
@@ -28,20 +40,20 @@ export const SignIn = () => {
         <input
           type="email"
           name="email"
-          value={email}
+          value={formData.email}
           onChange={handleChange}
           required
         />
-        <label htmlFor="">Email</label>
+        <label htmlFor="email">Email</label>
 
         <input
           type="password"
           name="password"
-          value={password}
+          value={formData.password}
           onChange={handleChange}
           required
         />
-        <label htmlFor="">Password</label>
+        <label htmlFor="password">Password</label>
 
         <input type="submit" value="Submit" />
       </form>
