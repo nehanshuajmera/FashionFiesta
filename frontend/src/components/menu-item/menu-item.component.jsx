@@ -1,4 +1,4 @@
-import './menu-item.styles.scss'
+import "./menu-item.styles.scss";
 
 export const MenuItem = ({ title, imageUrl, size }) => {
   return (
@@ -6,7 +6,7 @@ export const MenuItem = ({ title, imageUrl, size }) => {
       <div
         className="background-image"
         style={{
-          backgroundImage: `url(${imageUrl})`
+          backgroundImage: `url(${imageUrl})`,
         }}
       />
       <div className="content">
@@ -14,5 +14,5 @@ export const MenuItem = ({ title, imageUrl, size }) => {
         <span className="subtitle">SHOP NOW</span>
       </div>
     </div>
-  )
-}
+  );
+};
