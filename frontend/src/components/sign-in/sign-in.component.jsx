@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import './sign-in.styles.scss';
-import { FormInput } from '../form-input/form-input.component';
-import { CustomButton } from '../custom-button/custom-button.component';
+import { useState } from "react";
+import "./sign-in.styles.scss";
+import { FormInput } from "../form-input/form-input.component";
+import { CustomButton } from "../custom-button/custom-button.component";
+import { auth, googleProvider } from "../../firebase/firebase.utils";
+import { signInWithPopup } from "firebase/auth";
 
 export const SignIn = () => {
-
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const handleSubmit = (e) => {
@@ -19,18 +20,28 @@ export const SignIn = () => {
 
     // clear the form fields
     setFormData({
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     });
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { value, name } = e.target;
 
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
+  };
+
+  const handleClick = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      console.log("User Info:", user);
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
   };
 
   return (
@@ -58,7 +69,8 @@ export const SignIn = () => {
         />
 
         <CustomButton type="submit">Sign In</CustomButton>
+        <CustomButton onClick={handleClick}>Sign In With Google</CustomButton>
       </form>
     </div>
-  )
-}
+  );
+};

@@ -13,7 +13,7 @@ export const MenuItem = ({ title, imageUrl, size, linkUrl }) => {
       <div
         className="background-image"
         style={{
-          backgroundImage: `url(${imageUrl})`,
+          backgroundImage: `url(${imageUrl})`, 
         }}
       />
       <div className="content">

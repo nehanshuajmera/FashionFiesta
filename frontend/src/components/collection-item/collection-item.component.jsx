@@ -1,4 +1,4 @@
-import './collection-item.styles.scss';
+import "./collection-item.styles.scss";
 
 export const CollectionItem = ({ name, price, imageUrl }) => {
   return (
@@ -6,7 +6,7 @@ export const CollectionItem = ({ name, price, imageUrl }) => {
       <div
         className="image"
         style={{
-          backgroundImage: `url(${imageUrl})`
+          backgroundImage: `url(${imageUrl})`,
         }}
       />
       <div className="collection-footer">
@@ -14,5 +14,5 @@ export const CollectionItem = ({ name, price, imageUrl }) => {
         <span className="price">{price}</span>
       </div>
     </div>
-  )
-}
+  );
+};
