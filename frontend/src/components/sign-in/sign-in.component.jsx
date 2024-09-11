@@ -2,8 +2,7 @@ import { useState } from "react";
 import "./sign-in.styles.scss";
 import { FormInput } from "../form-input/form-input.component";
 import { CustomButton } from "../custom-button/custom-button.component";
-import { auth, googleProvider } from "../../firebase/firebase.utils";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithGoogle } from "../../firebase/firebase.utils";
 
 export const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -34,14 +33,8 @@ export const SignIn = () => {
     }));
   };
 
-  const handleClick = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      console.log("User Info:", user);
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-    }
+  const handleClick = () => {
+    signInWithGoogle();
   };
 
   return (
@@ -67,9 +60,12 @@ export const SignIn = () => {
           label="Password"
           required
         />
-
-        <CustomButton type="submit">Sign In</CustomButton>
-        <CustomButton onClick={handleClick}>Sign In With Google</CustomButton>
+        <div className="buttons">
+          <CustomButton type="submit">Sign In</CustomButton>
+          <CustomButton isGoogleSignIn onClick={handleClick}>
+            Sign In With Google
+          </CustomButton>
+        </div>
       </form>
     </div>
   );

@@ -1,6 +1,12 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore"; // For Firestore database (optional)
 
 const firebaseConfig = {
@@ -18,6 +24,20 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase services you want to use
 const auth = getAuth(app); // For authentication
 const db = getFirestore(app); // For Firestore database (optional)
-const googleProvider = new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
-export { auth, db, googleProvider };
+// Sign in with Google
+export const signInWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error(`Error during Sign-in: ${err.message}`);
+  }
+};
+
+// Sign Out
+export const signOutUser = () => signOut(auth);
+
+// Listen to user state
+export const onAuthStateChangedListner = (callback) =>
+  onAuthStateChanged(auth, callback);
