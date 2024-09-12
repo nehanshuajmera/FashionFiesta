@@ -32,9 +32,14 @@ export const getSingleUser = async (req, res) => {
 
 /* create a user */
 export const createUser = async (req, res) => {
-  const { userName, email, password } = req.body;
+  const { displayName, userName, email, password } = req.body;
   try {
-    const createUser = await User.create({ userName, email, password });
+    const createUser = await User.create({
+      displayName,
+      userName,
+      email,
+      password,
+    });
     res.status(201).json(createUser);
   } catch (err) {
     res.status(409).json({ error: err.message });
@@ -44,19 +49,23 @@ export const createUser = async (req, res) => {
 /* update a user */
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { userName, email, password } = req.body;
+  const { displayName, userName, email, password } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ message: "No user with that id" });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ message: "No user with that id" });
+    }
+
+    const updateUser = { displayName, userName, email, password, _id: id };
+    const newUser = await User.findByIdAndUpdate(id, updateUser, { new: true });
+
+    if (!newUser) {
+      res.status(404).json({ message: "No user with that id" });
+    }
+    res.status(200).json(newUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-
-  const updateUser = { userName, email, password, _id: id };
-  const newUser = await User.findByIdAndUpdate(id, updateUser, { new: true });
-
-  if (!newUser) {
-    res.status(404).json({ message: "No user with that id" });
-  }
-  res.status(200).json(newUser);
 };
 
 /* delete a user */
