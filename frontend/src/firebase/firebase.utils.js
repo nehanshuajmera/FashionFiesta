@@ -53,21 +53,22 @@ export const createUserDocument = async (userAuth, additionalData) => {
   return userDocRef;
 };
 
+// Retrieving User Data
 export const getUserDocument = async (uid) => {
   if (!uid) return null;
 
   try {
     const userDocRef = doc(db, "users", uid);
     const userSnapshot = await getDoc(userDocRef);
-    
+
     if (userSnapshot.exists()) {
       return userSnapshot.data(); // Return user data
     } else {
-      console.error('No user document found');
+      console.error("No user document found");
       return null;
     }
-  } catch (error) {
-    console.error("Error fetching user document", error);
+  } catch (err) {
+    console.error(`Error fetching user document: ${err.message}`);
     return null;
   }
 };
@@ -77,7 +78,7 @@ export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    
+
     // Create or update the user document in Firestore
     await createUserDocument(user);
   } catch (err) {

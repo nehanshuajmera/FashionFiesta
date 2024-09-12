@@ -14,30 +14,46 @@ import {
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener(async (user) => {
-      setCurrentUser(user);
+      try {
+        setCurrentUser(user);
 
-      if (user) {
-        // Fetch user data from Firestore
-        const userDoc = await getUserDocument(user.uid);
-        setUserData(userDoc);
-      } else {
-        setUserData(null);
+        if (user) {
+          // Fetch user data from Firestore
+          const userDoc = await getUserDocument(user.uid);
+          setUserData(userDoc);
+        } else {
+          setUserData(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user document:", error);
+      } finally {
+        setLoading(false); // Stop loading
       }
     });
 
     return () => unsubscribe();
   }, []);
+
   return (
     <div className="App">
-      <Header currentUser={currentUser} onSignOut={signOutUser} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/signin" element={<SignInAndSignUpPage />} />
-      </Routes>
+      {loading ? (
+        <p>Loading...</p> // Display loading message
+      ) : (
+        <>
+          <Header currentUser={currentUser} onSignOut={signOutUser} />
+          <div className="pages">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/shop" element={<ShopPage />} />
+              <Route path="/signin" element={<SignInAndSignUpPage />} />
+            </Routes>
+          </div>
+        </>
+      )}
     </div>
   );
 };

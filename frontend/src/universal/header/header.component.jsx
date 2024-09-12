@@ -22,7 +22,8 @@ export const Header = ({ currentUser, onSignOut }) => {
         </NavLink>
         {currentUser ? (
           <div className="option">
-            {/* <span className="option">{currentUser.displayName}</span> Show user's name */}
+            {/* <span className="option">{currentUser.displayName}</span>  */}
+            {/* Show user's name */}
             <button onClick={onSignOut}>Sign Out</button>{" "}
             {/* Sign Out button */}
           </div>
