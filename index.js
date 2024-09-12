@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { config } from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 config();
 
 /* importing routes */ 
@@ -11,9 +12,16 @@ const PORT = process.env.PORT;
 
 const app = express();
 
+// CORS options based on environment
+const corsOptions = {
+  origin: ["http://localhost:3000"], // Array of origins
+  credentials: true, // Allow credentials such as cookies to be sent
+};
+
 /* middleware */
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors(corsOptions));
 
 /* routes */
 app.get("/", (req, res) => {

@@ -1,21 +1,30 @@
 import express from "express";
 const router = express.Router();
 import {
+  userSignup,
+  userLogin,
+  logout,
   getAllUsers,
   getSingleUser,
-  createUser,
   updateUser,
   deleteUser,
 } from "../controllers/userController.js";
+import { userAuth } from "../middlewares/userAuth.js";
+
+/* user signup */
+router.post("/signup", userSignup);
+
+/* user login */
+router.post("/login", userLogin);
+
+/* user logout */ 
+router.get("/logout", userAuth, logout);
 
 /* get all users api */
 router.get("/", getAllUsers);
 
 /* get single user api */
 router.get("/:id", getSingleUser);
-
-/* create a user api */
-router.post("/", createUser);
 
 /* update a user api */
 router.patch("/:id", updateUser);
