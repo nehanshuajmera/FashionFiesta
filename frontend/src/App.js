@@ -6,7 +6,7 @@ import { ShopPage } from "./pages/shop/shop.component";
 import { Header } from "./universal/header/header.component";
 import { SignInAndSignUpPage } from "./pages/sign-in-and-sign-up-page/sign-in-and-sign-up.component";
 import {
-  onAuthStateChangedListner,
+  onAuthStateChangedListener,
   signOutUser,
 } from "./firebase/firebase.utils";
 
@@ -14,7 +14,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListner((user) => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
       setCurrentUser(user);
     });
 

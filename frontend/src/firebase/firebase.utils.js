@@ -7,7 +7,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // For Firestore database (optional)
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"; // For Firestore database (optional)
 
 const firebaseConfig = {
   apiKey: "AIzaSyDwQkehzHaqoQn8CEDAo63CIUOmJ7qjp_0",
@@ -26,10 +26,41 @@ const auth = getAuth(app); // For authentication
 const db = getFirestore(app); // For Firestore database (optional)
 const provider = new GoogleAuthProvider();
 
+// Function to create or update a user document in Firestore
+export const createUserDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userDocRef = doc(db, "users", userAuth.uid); // Reference to the user document
+  const userSnapshot = await getDoc(userDocRef); // Fetch user document snapshot
+
+  // If the user does not exist, create a new document
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      });
+    } catch (err) {
+      console.error(`Error creating the user document: ${err.message}`);
+    }
+  }
+
+  return userDocRef;
+};
+
 // Sign in with Google
 export const signInWithGoogle = async () => {
   try {
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    
+    // Create or update the user document in Firestore
+    await createUserDocument(user);
   } catch (err) {
     console.error(`Error during Sign-in: ${err.message}`);
   }
@@ -39,5 +70,5 @@ export const signInWithGoogle = async () => {
 export const signOutUser = () => signOut(auth);
 
 // Listen to user state
-export const onAuthStateChangedListner = (callback) =>
+export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
