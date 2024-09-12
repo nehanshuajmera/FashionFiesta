@@ -8,14 +8,24 @@ import { SignInAndSignUpPage } from "./pages/sign-in-and-sign-up-page/sign-in-an
 import {
   onAuthStateChangedListener,
   signOutUser,
+  getUserDocument,
 } from "./firebase/firebase.utils";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user) => {
+    const unsubscribe = onAuthStateChangedListener(async (user) => {
       setCurrentUser(user);
+
+      if (user) {
+        // Fetch user data from Firestore
+        const userDoc = await getUserDocument(user.uid);
+        setUserData(userDoc);
+      } else {
+        setUserData(null);
+      }
     });
 
     return () => unsubscribe();

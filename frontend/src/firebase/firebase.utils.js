@@ -53,6 +53,25 @@ export const createUserDocument = async (userAuth, additionalData) => {
   return userDocRef;
 };
 
+export const getUserDocument = async (uid) => {
+  if (!uid) return null;
+
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+    
+    if (userSnapshot.exists()) {
+      return userSnapshot.data(); // Return user data
+    } else {
+      console.error('No user document found');
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user document", error);
+    return null;
+  }
+};
+
 // Sign in with Google
 export const signInWithGoogle = async () => {
   try {
