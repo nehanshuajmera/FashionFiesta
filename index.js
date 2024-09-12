@@ -4,6 +4,9 @@ import { config } from "dotenv";
 import cors from "cors";
 config();
 
+/* importing routes */ 
+import { userRoutes } from "./routes/userRoute.js";
+
 const PORT = process.env.PORT;
 
 const app = express();
@@ -16,6 +19,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.status(200).json("Backend Working, Happy Coding!!");
 });
+app.use("/api/users", userRoutes);
 
 const connect = async () => {
   try {
