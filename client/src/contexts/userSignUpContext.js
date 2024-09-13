@@ -16,6 +16,9 @@ export const UserSignUpProvider = ({ children }) => {
 
     try {
       const res = await axios.post(`${apiUrl}/users/signup`, userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
         withCredentials: true,
       });
       setUser(res.data);

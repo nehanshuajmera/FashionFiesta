@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import { User } from "../models/userModel.js";
+import { decryptPassword } from "../decrypt.js";
 
 /* Create Token */
 const createToken = (id) => {
@@ -12,9 +12,14 @@ const createToken = (id) => {
 
 /* user signup */
 export const userSignup = async (req, res) => {
-  const { displayName, userName, email, password } = req.body;
+  const { displayName, userName, email, encryptedPassword } = req.body;
+
   try {
-    const user = await User.signup(displayName, userName, email, password);
+    // Decrypt the encrypted password
+    const decryptedPassword = decryptPassword(encryptedPassword);6
+
+    // Use decrypted password in the signup
+    const user = await User.signup(displayName, userName, email, decryptedPassword);
     const token = createToken(user._id, "User");
 
     // Set the cookie
@@ -25,15 +30,19 @@ export const userSignup = async (req, res) => {
 
     res.status(201).json({ user: user.userName, token });
   } catch (err) {
+    console.error("Error signing up:", err.message); // Log error for debugging
     res.status(400).json({ error: err.message });
   }
 };
 
 /* user login */
 export const userLogin = async (req, res) => {
-  const { usernameOrEmail, password } = req.body;
+  const { usernameOrEmail, encryptedPassword } = req.body;
   try {
-    const user = await User.login(usernameOrEmail, password);
+    // Decrypt the encrypted password
+    const decryptedPassword = decryptPassword(encryptedPassword);
+
+    const user = await User.login(usernameOrEmail, decryptedPassword);
     const token = createToken(user._id, "User");
 
     // Set the cookie
@@ -104,32 +113,28 @@ export const updateUser = async (req, res) => {
       return res.status(404).json({ message: "No user with that id" });
     }
 
-    // If password is being updated, hash the new password
-    let updatedPassword = existingUser.password; // Keep old password if no new password is provided
-    if (password) {
-      const salt = await bcrypt.genSalt(10); // Generate salt
-      updatedPassword = await bcrypt.hash(password, salt); // Hash the new password
-    }
-
     // Update the user object
-    const updatedUser = {
+    const updateFields = {
       displayName: displayName || existingUser.displayName,
       userName: userName || existingUser.userName,
       email: email || existingUser.email,
-      password: updatedPassword, // Use either the hashed new password or the old one
-      _id: id,
     };
 
+    // If password is provided, add it to the update fields
+    if (password) {
+      updateFields.password = password;
+    }
+
     // Find and update the user in the database
-    const newUser = await User.findByIdAndUpdate(id, updatedUser, {
+    const updatedUser = await User.findByIdAndUpdate(id, updateFields, {
       new: true,
     });
 
-    if (!newUser) {
+    if (!updatedUser) {
       return res.status(404).json({ message: "No user with that id" });
     }
 
-    res.status(200).json(newUser);
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

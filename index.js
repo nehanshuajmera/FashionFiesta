@@ -20,6 +20,7 @@ const corsOptions = {
 
 /* middleware */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // For URL-encoded form data
 app.use(cookieParser());
 app.use(cors(corsOptions));
 
