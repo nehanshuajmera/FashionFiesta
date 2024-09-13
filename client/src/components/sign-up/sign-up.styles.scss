@@ -1,0 +1,14 @@
+.sign-up {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+
+  .title {
+    margin: 1rem 0;
+    font-size: 3rem;
+  }
+
+  span {
+    font-size: 2rem;
+  }
+}
